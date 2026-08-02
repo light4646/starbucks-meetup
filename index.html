@@ -333,7 +333,7 @@
           </div>
 
           <button class="submit" type="submit">Send my time</button>
-          <p class="privacy">Nothing is uploaded—your device prepares a message for you to share.</p>
+          <p class="privacy">Nothing is uploaded—your device opens Messages with the details ready to send.</p>
         </form>
       </section>
 
@@ -342,7 +342,7 @@
           <div class="check">✓</div>
           <h2>Perfect, see you there.</h2>
           <p class="summary" id="summary"></p>
-          <button class="share" id="shareButton" type="button">Share the details</button>
+          <button class="share" id="shareButton" type="button">Open Messages again</button>
           <button class="edit" id="editButton" type="button">Change my answer</button>
         </div>
       </section>
@@ -413,22 +413,11 @@
       window.setTimeout(() => container.replaceChildren(), 2800);
     };
 
-    const shareDetails = async () => {
-      if (navigator.share) {
-        await navigator.share({ title: 'Starbucks meetup', text: shareText });
-        return 'shared';
-      }
-
-      if (navigator.clipboard && window.isSecureContext) {
-        await navigator.clipboard.writeText(shareText);
-        return 'copied';
-      }
-
-      window.prompt('Copy this message:', shareText);
-      return 'prompted';
+    const openMessages = () => {
+      window.location.href = `sms:+19295981588&body=${encodeURIComponent(shareText)}`;
     };
 
-    form.addEventListener('submit', async (event) => {
+    form.addEventListener('submit', (event) => {
       event.preventDefault();
       if (!form.reportValidity()) return;
 
@@ -444,35 +433,16 @@
       successView.classList.add('show');
       celebrate();
 
-      try {
-        const result = await shareDetails();
-        if (result === 'copied') {
-          shareButton.textContent = 'Copied—paste it into Messages';
-        }
-      } catch (error) {
-        if (error.name !== 'AbortError') window.prompt('Copy this message:', shareText);
-      }
+      openMessages();
     });
 
-    shareButton.addEventListener('click', async () => {
-      try {
-        const result = await shareDetails();
-        if (result === 'copied') {
-          shareButton.textContent = 'Copied—paste it into Messages';
-          window.setTimeout(() => { shareButton.textContent = 'Share the details'; }, 2400);
-        }
-      } catch (error) {
-        if (error.name !== 'AbortError') {
-          window.prompt('Copy this message:', shareText);
-        }
-      }
-    });
+    shareButton.addEventListener('click', openMessages);
 
     editButton.addEventListener('click', () => {
       successView.classList.remove('show');
       formView.classList.remove('hide');
       scene.classList.remove('hide');
-      shareButton.textContent = 'Share the details';
+      shareButton.textContent = 'Open Messages again';
     });
   </script>
 </body>

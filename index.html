@@ -291,7 +291,7 @@
     .chip span:hover { transform: translateY(-2px); border-color: var(--green); }
 
     .row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-    input[type="date"], input[type="time"], input[type="text"] {
+    input[type="date"], input[type="text"] {
       width: 100%;
       min-height: 50px;
       border: 1px solid var(--line);
@@ -489,9 +489,9 @@
 
   <main>
     <section class="opening">
-      <p class="eyebrow">Coffee + laptop rescue</p>
+      <p class="eyebrow">Coffee + remote connection fix</p>
       <h1>Let’s make a plan.</h1>
-      <p class="lead">Scroll through the story, see where we’re meeting, then choose your time at the very end.</p>
+      <p class="lead">Scroll through the story, see where we’re meeting, then choose your day at the very end.</p>
     </section>
     <div class="scroll-invite" aria-hidden="true">Keep scrolling</div>
   </main>
@@ -511,7 +511,7 @@
       <div class="chapter-inner reveal">
         <p class="chapter-kicker">01 / The roast</p>
         <h2 class="chapter-title">Good plans start brewing.</h2>
-        <p class="chapter-copy">A laptop, a coffee, and one time that works. Keep going.</p>
+        <p class="chapter-copy">A laptop, a coffee, and one day that works. Keep going.</p>
       </div>
     </section>
 
@@ -540,7 +540,7 @@
       <div class="chapter-inner">
         <div class="finale-heading reveal">
           <p class="chapter-kicker">You made it</p>
-          <h2 class="chapter-title">Now choose<br>your time.</h2>
+          <h2 class="chapter-title">Now choose<br>your day.</h2>
           <p class="chapter-copy">One last step, then Messages does the rest.</p>
         </div>
 
@@ -556,9 +556,9 @@
           </section>
 
           <section class="content" id="formView">
-            <p class="eyebrow">Coffee + laptop rescue</p>
+            <p class="eyebrow">Coffee + remote connection fix</p>
             <h1>When will you be at Starbucks?</h1>
-            <p class="lead">Pick a time that works for you, and I’ll meet you there so we can fix your laptop.</p>
+            <p class="lead">Pick a day that works for you, and I’ll meet you there to fix the remote-control connection issue.</p>
 
             <form id="meetupForm">
               <fieldset>
@@ -570,15 +570,9 @@
                 </div>
               </fieldset>
 
-              <div class="row">
-                <div>
-                  <label for="date">Date</label>
-                  <input id="date" type="date" required>
-                </div>
-                <div>
-                  <label for="time">Time</label>
-                  <input id="time" type="time" required>
-                </div>
+              <div>
+                <label for="date">Date</label>
+                <input id="date" type="date" required>
               </div>
 
               <div>
@@ -586,7 +580,7 @@
                 <input id="location" type="text" placeholder="Address or location name" autocomplete="street-address">
               </div>
 
-              <button class="submit" type="submit">Send my time</button>
+              <button class="submit" type="submit">Send my day</button>
               <p class="privacy">Nothing is uploaded—your device opens Messages with the details ready to send.</p>
             </form>
           </section>
@@ -610,7 +604,7 @@
   <script>
     const form = document.querySelector('#meetupForm');
     const dateInput = document.querySelector('#date');
-    const timeInput = document.querySelector('#time');
+
     const locationInput = document.querySelector('#location');
     const formView = document.querySelector('#formView');
     const scene = document.querySelector('#scene');
@@ -755,12 +749,11 @@
       event.preventDefault();
       if (!form.reportValidity()) return;
 
-      const selected = new Date(`${dateInput.value}T${timeInput.value}`);
+      const selected = new Date(`${dateInput.value}T12:00:00`);
       const dateText = new Intl.DateTimeFormat(undefined, { weekday: 'long', month: 'long', day: 'numeric' }).format(selected);
-      const timeText = new Intl.DateTimeFormat(undefined, { hour: 'numeric', minute: '2-digit' }).format(selected);
       const locationText = locationInput.value.trim();
-      summary.textContent = `${dateText} at ${timeText}${locationText ? ` at ${locationText}` : ' at Starbucks'}.`;
-      shareText = `I’ll be at ${locationText || 'Starbucks'} on ${dateText} at ${timeText}. See you then!`;
+      summary.textContent = `${dateText}${locationText ? ` at ${locationText}` : ' at Starbucks'}.`;
+      shareText = `I can meet at ${locationText || 'Starbucks'} on ${dateText} to fix the remote-control connection issue. What time works for you?`;
 
       formView.classList.add('hide');
       scene.classList.add('hide');

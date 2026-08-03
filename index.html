@@ -575,11 +575,6 @@
                 <input id="date" type="date" required>
               </div>
 
-              <div>
-                <label for="location">Which Starbucks? <span style="font-weight:500;color:var(--muted)">(optional)</span></label>
-                <input id="location" type="text" placeholder="Address or location name" autocomplete="street-address">
-              </div>
-
               <button class="submit" type="submit">Send my day</button>
               <p class="privacy">Nothing is uploaded—your device opens Messages with the details ready to send.</p>
             </form>
@@ -605,7 +600,6 @@
     const form = document.querySelector('#meetupForm');
     const dateInput = document.querySelector('#date');
 
-    const locationInput = document.querySelector('#location');
     const formView = document.querySelector('#formView');
     const scene = document.querySelector('#scene');
     const successView = document.querySelector('#successView');
@@ -751,9 +745,8 @@
 
       const selected = new Date(`${dateInput.value}T12:00:00`);
       const dateText = new Intl.DateTimeFormat(undefined, { weekday: 'long', month: 'long', day: 'numeric' }).format(selected);
-      const locationText = locationInput.value.trim();
-      summary.textContent = `${dateText}${locationText ? ` at ${locationText}` : ' at Starbucks'}.`;
-      shareText = `I can meet at ${locationText || 'Starbucks'} on ${dateText} to fix the remote-control connection issue. What time works for you?`;
+      summary.textContent = `${dateText} at Starbucks.`;
+      shareText = `I can meet at Starbucks on ${dateText} to fix the remote-control connection issue. What time works for you?`;
 
       formView.classList.add('hide');
       scene.classList.add('hide');

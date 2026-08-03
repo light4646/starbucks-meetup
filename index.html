@@ -540,7 +540,7 @@
       <div class="chapter-inner">
         <div class="finale-heading reveal">
           <p class="chapter-kicker">You made it</p>
-          <h2 class="chapter-title">Now choose<br>your day.</h2>
+          <h2 class="chapter-title">Now choose<br>your date and time.</h2>
           <p class="chapter-copy">One last step, then Messages does the rest.</p>
         </div>
 
@@ -558,7 +558,7 @@
           <section class="content" id="formView">
             <p class="eyebrow">Coffee + remote connection fix</p>
             <h1>When will you be at Starbucks?</h1>
-            <p class="lead">Pick a day that works for you, and I’ll meet you there to fix the remote-control connection issue.</p>
+            <p class="lead">Pick a date and time, and I’ll meet you there to fix the remote-control connection issue.</p>
 
             <form id="meetupForm">
               <fieldset>
@@ -575,7 +575,12 @@
                 <input id="date" type="date" required>
               </div>
 
-              <button class="submit" type="submit">Send my day</button>
+              <div>
+                <label for="time">Time</label>
+                <input id="time" type="time" required>
+              </div>
+
+              <button class="submit" type="submit">Send my date and time</button>
               <p class="privacy">Nothing is uploaded—your device opens Messages with the details ready to send.</p>
             </form>
           </section>
@@ -599,6 +604,7 @@
   <script>
     const form = document.querySelector('#meetupForm');
     const dateInput = document.querySelector('#date');
+    const timeInput = document.querySelector('#time');
 
     const formView = document.querySelector('#formView');
     const scene = document.querySelector('#scene');
@@ -697,6 +703,7 @@
     const today = new Date();
     dateInput.min = toLocalISO(today);
     dateInput.value = toLocalISO(today);
+    timeInput.value = '12:00';
     document.querySelector('input[value="today"]').checked = true;
 
     quickDays.forEach((radio) => {
@@ -745,8 +752,11 @@
 
       const selected = new Date(`${dateInput.value}T12:00:00`);
       const dateText = new Intl.DateTimeFormat(undefined, { weekday: 'long', month: 'long', day: 'numeric' }).format(selected);
-      summary.textContent = `${dateText} at Starbucks.`;
-      shareText = `I can meet at Starbucks on ${dateText} to fix the remote-control connection issue. What time works for you?`;
+      const [hour, minute] = timeInput.value.split(':').map(Number);
+      selected.setHours(hour, minute);
+      const timeText = new Intl.DateTimeFormat(undefined, { hour: 'numeric', minute: '2-digit' }).format(selected);
+      summary.textContent = `${dateText} at ${timeText} at Starbucks.`;
+      shareText = `I can meet at Starbucks on ${dateText} at ${timeText} to fix the remote-control connection issue.`;
 
       formView.classList.add('hide');
       scene.classList.add('hide');
